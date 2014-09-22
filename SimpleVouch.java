@@ -67,9 +67,16 @@ public class SimpleVouch extends archjava.runtime.Component
 
   public void simulate () {
     archjava.runtime.Component.checkPort(this.authenticatorExtern$port$, "authenticatorExtern").register(SimpleVouch.providerName, SimpleVouch.providerEmail, SimpleVouch.providerPassword, this);
-    int authToken = archjava.runtime.Component.checkPort(this.authenticatorExtern$port$, "authenticatorExtern").authenticate(SimpleVouch.providerEmail, SimpleVouch.providerPassword, this);
+    int authToken = archjava.runtime.Component.checkPort(this.authenticatorExtern$port$, "authenticatorExtern").authenticate(SimpleVouch.providerEmail, SimpleVouch.providerPassword + "wrong", this);
+    java.lang.System.out.println("Authentication token: " + authToken);
+    java.lang.System.out.println("If you saw a number = 0, then everything is perfect :)");
+    authToken = archjava.runtime.Component.checkPort(this.authenticatorExtern$port$, "authenticatorExtern").authenticate(SimpleVouch.providerEmail, SimpleVouch.providerPassword, this);
+    java.lang.System.out.println("Authentication token: " + authToken);
+    java.lang.System.out.println("If you saw a number > 0, then everything is perfect :)");
     java.lang.System.out.println("Send vouch status: " + archjava.runtime.Component.checkPort(this.dashboardSend$port$, "dashboardSend").sendVouch(SimpleVouch.providerEmail, authToken, SimpleVouch.recipientName, SimpleVouch.recipientEmail, SimpleVouch.text, this));
     java.lang.System.out.println("If you saw true, then everything is perfect :)");
+    java.lang.System.out.println("Send vouch status: " + archjava.runtime.Component.checkPort(this.dashboardSend$port$, "dashboardSend").sendVouch(SimpleVouch.providerEmail, authToken / 2, SimpleVouch.recipientName, SimpleVouch.recipientEmail, SimpleVouch.text, this));
+    java.lang.System.out.println("If you saw false, then everything is perfect :)");
     archjava.runtime.Component.checkPort(this.authenticatorExtern$port$, "authenticatorExtern").deauthenticate(SimpleVouch.providerEmail, this);
     java.lang.System.out.println("Send vouch status: " + archjava.runtime.Component.checkPort(this.dashboardSend$port$, "dashboardSend").sendVouch(SimpleVouch.providerEmail, authToken, SimpleVouch.recipientName, SimpleVouch.recipientEmail, SimpleVouch.text, this));
     java.lang.System.out.println("If you saw false, then everything is perfect :)");

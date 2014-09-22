@@ -41,15 +41,30 @@ public component class SimpleVouch {
 		
 		// In a galaxy far, far away...
 		
-		// Authenticate Vlad, send a vouch, disappear (for success)
-		int authToken = authenticatorExtern.authenticate(providerEmail, providerPassword);
+		// Authenticate Vlad with a wrong password (should fail)
+		int authToken = authenticatorExtern.authenticate(providerEmail, providerPassword + "wrong");
+		System.out.println("Authentication token: " + authToken);
+		System.out.println("If you saw a number = 0, then everything works as intended :)");
+
+		// Authenticate Vlad with a good password (should succeed)
+		authToken = authenticatorExtern.authenticate(providerEmail, providerPassword);
+		System.out.println("Authentication token: " + authToken);
+		System.out.println("If you saw a number > 0, then everything works as intended :)");
+		
+		// Send a vouch as Vlad (should succeed)
 		System.out.println("Send vouch status: " + dashboardSend.sendVouch(providerEmail, authToken, recipientName, recipientEmail, text));
-		System.out.println("If you saw true, then everything is perfect :)");
+		System.out.println("If you saw true, then everything works as intended :)");
+		
+		// Send a vouch as Vlad with a wrong token (should fail)
+		System.out.println("Send vouch status: " + dashboardSend.sendVouch(providerEmail, authToken / 2, recipientName, recipientEmail, text));
+		System.out.println("If you saw false, then everything works as intended :)");
+		
+		// Deauthenticate Vlad
 		authenticatorExtern.deauthenticate(providerEmail);
 		
-		// "Another" Vlad tries to send a vouch (failure)
+		// An unauthenticated user Vlad tries to send a vouch (should fail)
 		System.out.println("Send vouch status: " + dashboardSend.sendVouch(providerEmail, authToken, recipientName, recipientEmail, text));
-		System.out.println("If you saw false, then everything is perfect :)");
+		System.out.println("If you saw false, then everything works as intended :)");
 	}
 	
 	public static void main(String args[]) {
